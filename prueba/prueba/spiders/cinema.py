@@ -5,6 +5,7 @@ class CinemaSpider(scrapy.Spider):
     name = "cinema"
 
     def start_requests(self):
+        """Envía la petición al endpoint que devuelve los datos"""
         url = 'http://www.yelmocines.es/now-playing.aspx/GetNowPlaying'
         yield scrapy.Request(
             url=url, callback=self.parse, method='POST',
@@ -13,14 +14,15 @@ class CinemaSpider(scrapy.Spider):
         )
 
     def parse(self, response):
+        """Extrae la información de la respuesta"""
         info = json.loads(response.text)
         cinemas = info.get('d').get('Cinemas')
-        parsed_cinemas = []
-
+        
         for cinema in cinemas:
-            parsed_cinemas.append(self.parse_cinemas(cinema))
+            yield self.parse_cinemas(cinema)
 
     def parse_cinemas(self, cinema):
+        """Extrae la información de un cine"""
         cine = {
             'cinema_name' : cinema.get('Name'),
             'movies' : self.get_movies(cinema.get('Dates'))
@@ -29,11 +31,12 @@ class CinemaSpider(scrapy.Spider):
         return cine
 
     def get_movies(self, dates):
+        """Extrae la información de todas las películas de un cine"""
         parsed_movies = {}
 
         for date in dates:
             show_date = date.get('ShowtimeDate')
-            
+
             for movie in date.get('Movies'):
                 if movie.get('Title') in parsed_movies:
                     parsed_movies[movie.get('Title')]['show_date'].append(show_date)
