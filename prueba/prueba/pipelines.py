@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
+import boto3
 
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+from scrapy.exceptions import DropItem
 
-
-class PruebaPipeline(object):
+class DynamoDbPipeline(object):
+    """Pipeline to store objects in dynamodb"""
     def process_item(self, item, spider):
+        dynamodb = boto3.resource('dynamodb')
+        table = dynamodb.Table(f'{spider.name}s')
+
+        table.put_item(Item=item)
+
         return item
