@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 scrapy = "*"
-scrapy-dynamodb = "*"
+boto3 = "*"
 
 [requires]
 python_version = "3.7"

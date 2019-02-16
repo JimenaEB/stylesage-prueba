@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # Scrapy settings for prueba project
 #
 # For simplicity, this file contains only settings considered important or
@@ -64,9 +63,9 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'prueba.pipelines.PruebaPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'prueba.pipelines.DynamoDbPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
